@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Becky's Wardrobe — Full View</title>
+<style>
+:root{--bg:#f7f2ec;--card:#fffdfa;--text:#2f2a26;--muted:#766f68;--line:#ddd3ca;--accent:#7b5a45}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.wrap{max-width:950px;margin:auto;padding:20px 16px 40px}
+h1{font-family:Georgia,serif;font-size:34px;margin:0} .intro{color:var(--muted);font-size:14px;margin-top:6px}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.sum{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+.sum b{display:block;font-size:22px} .sum span{font-size:12px;color:var(--muted)}
+.controls{display:grid;grid-template-columns:1fr 180px;gap:10px;margin:14px 0 18px}
+input,select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:white;color:var(--text);font-size:16px}
+.section{margin:22px 0} .section h2{font-family:Georgia,serif;font-size:23px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px}
+.code{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.08em} .name{font-size:16px;font-weight:700;line-height:1.25;margin:5px 0 8px}
+.meta{font-size:13px;line-height:1.45;color:var(--muted)} .qty{display:inline-block;margin-top:8px;padding:4px 8px;border-radius:999px;border:1px solid var(--line);font-size:11px;background:white}
+.hidden{display:none!important}
+.note{margin-top:24px;padding:14px;border:1px solid var(--line);background:var(--card);border-radius:16px;color:var(--muted);font-size:13px}
+@media(max-width:520px){.summary{grid-template-columns:1fr 1fr}.summary .sum:last-child{grid-column:1/-1}.controls{grid-template-columns:1fr}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Becky's Wardrobe</h1>
+<div class="intro">Full catalogue view — every item listed, grouped by category.</div>
+<div class="summary">
+  <div class="sum"><b>38</b><span>catalogued entries</span></div>
+  <div class="sum"><b>39</b><span>physical pieces</span></div>
+  <div class="sum"><b>5</b><span>items awaiting photos</span></div>
+</div>
+
+<div class="controls">
+  <input id="q" type="search" placeholder="Search W12, brown, cardigan...">
+  <select id="cat">
+    <option value="All">All categories</option>
+    <option>Tops & knits</option><option>Bottoms</option><option>Dresses</option><option>Outerwear</option><option>Shoes</option>
+  </select>
+</div>
+<div id="sections"></div>
+<div class="note">W31–W35 are provisional because you told me you own them but haven't added photos yet. W30 is counted as 2 physical pairs. W01A/B/C are separate colourways.</div>
+</div>
+<script>
+const items=[{"code": "W01A", "name": "Black strapless midi/maxi dress", "cat": "Dresses", "tone": "Black", "note": "Casual, easy, flowy", "qty": 1}, {"code": "W01B", "name": "Chocolate strapless midi dress", "cat": "Dresses", "tone": "Chocolate", "note": "Same easy silhouette as W01A", "qty": 1}, {"code": "W01C", "name": "Ivory strapless midi dress", "cat": "Dresses", "tone": "Ivory", "note": "Fresh summer colourway", "qty": 1}, {"code": "W02", "name": "Brown jumper waistcoat", "cat": "Tops & knits", "tone": "Chocolate brown", "note": "Longline, sleeveless, button-front", "qty": 1}, {"code": "W03", "name": "Adidas Superstar II trainers", "cat": "Shoes", "tone": "White / navy", "note": "Cloud white + night indigo", "qty": 1}, {"code": "W04", "name": "Printed bandeau/scarf top", "cat": "Tops & knits", "tone": "Cream / blue / tan", "note": "Pointed asymmetric hem", "qty": 1}, {"code": "W05", "name": "Black tailored waistcoat", "cat": "Tops & knits", "tone": "Black", "note": "Fitted, button-front", "qty": 1}, {"code": "W06", "name": "Black tailored wide-leg trousers", "cat": "Bottoms", "tone": "Black", "note": "Matching suit trouser", "qty": 1}, {"code": "W07", "name": "White cropped tie-front cardigan", "cat": "Tops & knits", "tone": "White", "note": "Lightweight cropped layer", "qty": 1}, {"code": "W08", "name": "Wide-leg blue jeans", "cat": "Bottoms", "tone": "Mid/light blue", "note": "Relaxed wide-leg denim", "qty": 1}, {"code": "W09", "name": "Leopard-print midi/maxi skirt", "cat": "Bottoms", "tone": "Brown / black", "note": "Fluid animal print", "qty": 1}, {"code": "W10", "name": "Dark-grey oversized cardigan", "cat": "Tops & knits", "tone": "Dark grey", "note": "Slouchy, oversized", "qty": 1}, {"code": "W11", "name": "Ivory jumper", "cat": "Tops & knits", "tone": "Ivory", "note": "Relaxed knit", "qty": 1}, {"code": "W12", "name": "Black satin midi skirt", "cat": "Bottoms", "tone": "Black", "note": "Slimmer/tighter fit", "qty": 1}, {"code": "W13", "name": "Pink corset top", "cat": "Tops & knits", "tone": "Pink", "note": "Structured with pointed hem", "qty": 1}, {"code": "W14", "name": "Check wide-leg trousers", "cat": "Bottoms", "tone": "Cream / tan check", "note": "High-waisted tailored", "qty": 1}, {"code": "W15", "name": "Brown blazer", "cat": "Outerwear", "tone": "Brown", "note": "Relaxed tailoring", "qty": 1}, {"code": "W16", "name": "Yellow midi dress", "cat": "Dresses", "tone": "Yellow", "note": "Fitted bodice + gathered skirt", "qty": 1}, {"code": "W17", "name": "Black-and-white check midi dress", "cat": "Dresses", "tone": "Black / white", "note": "Full flared skirt", "qty": 1}, {"code": "W18", "name": "Green corset top", "cat": "Tops & knits", "tone": "Olive / lime green", "note": "Structured fitted top", "qty": 1}, {"code": "W19", "name": "White tailored waistcoat", "cat": "Tops & knits", "tone": "White", "note": "Longline fitted tailoring", "qty": 1}, {"code": "W20", "name": "Brown/tan Nike trainers", "cat": "Shoes", "tone": "Tan / brown", "note": "Neutral everyday trainer", "qty": 1}, {"code": "W21", "name": "Chocolate oversized jumper", "cat": "Tops & knits", "tone": "Chocolate", "note": "Relaxed long-sleeve knit", "qty": 1}, {"code": "W22", "name": "Pink cardigan", "cat": "Tops & knits", "tone": "Pink", "note": "Fitted/cropped feminine cardigan", "qty": 1}, {"code": "W23", "name": "Light-blue wide-leg jeans", "cat": "Bottoms", "tone": "Light blue", "note": "Very wide-leg denim", "qty": 1}, {"code": "W24", "name": "Hunter khaki rain jacket", "cat": "Outerwear", "tone": "Khaki", "note": "Longline hooded waterproof", "qty": 1}, {"code": "W25", "name": "Brown tailored wide-leg trousers", "cat": "Bottoms", "tone": "Dark chocolate", "note": "Smart but relaxed", "qty": 1}, {"code": "W26", "name": "Black relaxed T-shirt/top", "cat": "Tops & knits", "tone": "Black", "note": "Simple casual basic", "qty": 1}, {"code": "W27", "name": "Brown soft wide-leg joggers", "cat": "Bottoms", "tone": "Brown", "note": "Soft lounge trouser", "qty": 1}, {"code": "W28", "name": "Black soft sleeveless crop", "cat": "Tops & knits", "tone": "Black", "note": "Fitted casual basic", "qty": 1}, {"code": "W29", "name": "Dark-blue denim maxi skirt", "cat": "Bottoms", "tone": "Dark denim", "note": "Long full/A-line-ish silhouette", "qty": 1}, {"code": "W30", "name": "TALA black flared leggings", "cat": "Bottoms", "tone": "Black", "note": "Two identical pairs owned", "qty": 2}, {"code": "W31", "name": "White fitted shirt", "cat": "Tops & knits", "tone": "White", "note": "Provisional \u2014 photo to add", "qty": 1}, {"code": "W32", "name": "Black long-sleeve turtleneck", "cat": "Tops & knits", "tone": "Black", "note": "Provisional \u2014 photo to add", "qty": 1}, {"code": "W33", "name": "White fitted vest", "cat": "Tops & knits", "tone": "White", "note": "Provisional \u2014 photo to add", "qty": 1}, {"code": "W34", "name": "Black ballet flats", "cat": "Shoes", "tone": "Black", "note": "Provisional \u2014 photo to add", "qty": 1}, {"code": "W35", "name": "Brown suede ballet flats", "cat": "Shoes", "tone": "Brown suede", "note": "Provisional \u2014 photo to add", "qty": 1}, {"code": "W36", "name": "Cream-and-black striped knitted waistcoat", "cat": "Tops & knits", "tone": "Cream / black", "note": "Very fitted, cropped, button-front", "qty": 1}];
+const order=["Dresses","Tops & knits","Bottoms","Outerwear","Shoes"];
+const sections=document.getElementById("sections"),q=document.getElementById("q"),cat=document.getElementById("cat");
+function render(){
+  const term=q.value.trim().toLowerCase(), chosen=cat.value;
+  sections.innerHTML="";
+  order.forEach(category=>{
+    if(chosen!=="All" && chosen!==category) return;
+    const shown=items.filter(x=>x.cat===category && (!term || (x.code+" "+x.name+" "+x.tone+" "+x.note).toLowerCase().includes(term)));
+    if(!shown.length) return;
+    const sec=document.createElement("section"); sec.className="section";
+    sec.innerHTML=`<h2>${category} <span style="font-family:inherit;font-size:14px;color:var(--muted)">(${shown.length})</span></h2><div class="grid">${shown.map(x=>`<article class="card"><div class="code">${x.code}</div><div class="name">${x.name}</div><div class="meta"><b>Colour:</b> ${x.tone}<br>${x.note}</div>${x.qty>1?`<div class="qty">Qty ${x.qty}</div>`:""}</article>`).join("")}</div>`;
+    sections.appendChild(sec);
+  });
+  if(!sections.children.length) sections.innerHTML='<div class="note">No matching items.</div>';
+}
+q.addEventListener("input",render); cat.addEventListener("change",render); render();
+</script>
+</body></html>
